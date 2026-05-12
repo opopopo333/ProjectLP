@@ -12,7 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-
+using System.Data.Entity;
 namespace ProjectLP.Pages
 {
     /// <summary>
@@ -35,29 +35,33 @@ namespace ProjectLP.Pages
 
         private void UpdateData()
         {
-            // Базовый запрос: только не замороженные книги
-            var list = Core.Context.Books.Where(b => b.IsFrozen == false).ToList();
+            // Загружаем книги вместе с авторами и жанрами
+            var query = Core.Context.Books
+                .Include(b => b.User) // Подгружаем автора
+                .Include(b => b.Genres) // Подгружаем жанры
+                .Where(b => !b.IsFrozen)
+                .AsQueryable();
 
-            // Поиск по названию или автору
+            // Поиск (Title или Имя автора)
             if (!string.IsNullOrWhiteSpace(TbSearch.Text))
             {
-                list = list.Where(b => b.Title.ToLower().Contains(TbSearch.Text.ToLower()) ||
-                                       b.User.DisplayName.ToLower().Contains(TbSearch.Text.ToLower())).ToList();
+                string search = TbSearch.Text.ToLower();
+                query = query.Where(b => b.Title.ToLower().Contains(search) ||
+                                         b.User.DisplayName.ToLower().Contains(search));
             }
 
-            // Фильтрация по жанру
+            // Фильтр по жанру
             if (CbGenre.SelectedIndex > 0)
             {
-                var selectedGenre = CbGenre.SelectedItem as Genre;
-                // Т.к. связь Many-to-Many, проверяем наличие жанра в коллекции BookGenres
-                list = list.Where(b => b.Genres.Any(g => g.Id == selectedGenre.Id)).ToList();
+                int selectedGenreId = ((Genre)CbGenre.SelectedItem).Id;
+                query = query.Where(b => b.Genres.Any(g => g.Id == selectedGenreId));
             }
 
             // Сортировка
-            if (CbSort.SelectedIndex == 0) // По имени
-                list = list.OrderBy(b => b.Title).ToList();
-            else if (CbSort.SelectedIndex == 1) // По рейтингу (если есть отзывы)
-                list = list.OrderByDescending(b => b.Reviews.Any() ? b.Reviews.Average(r => r.Rating) : 0).ToList();
+            var list = query.ToList();
+            if (CbSort.SelectedIndex == 0) list = list.OrderBy(x => x.Title).ToList();
+            else if (CbSort.SelectedIndex == 1)
+                list = list.OrderByDescending(x => x.Reviews.Any() ? x.Reviews.Average(r => r.Rating) : 0).ToList();
 
             LvBooks.ItemsSource = list;
         }

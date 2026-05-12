@@ -20,27 +20,115 @@ namespace ProjectLP.Pages
     /// </summary>
     public partial class BookDetailsPage : Page
     {
-        private int _currentBookId;
+        private Book _currentBook;
 
-        // Изменяем конструктор так, чтобы он принимал ID книги
         public BookDetailsPage(int bookId)
         {
             InitializeComponent();
+            _currentBook = Core.Context.Books.FirstOrDefault(b => b.Id == bookId);
+            this.DataContext = _currentBook;
 
-            _currentBookId = bookId;
-            LoadBookData();
+            LoadReviews();
         }
 
-        private void LoadBookData()
+        private void LoadReviews()
         {
-            // Ищем книгу в базе по пришедшему ID
-            var currentBook = Core.Context.Books.FirstOrDefault(b => b.Id == _currentBookId);
+            // Обновляем список отзывов для этой книги
+            IcReviews.ItemsSource = Core.Context.Reviews.Where(r => r.BookId == _currentBook.Id).ToList();
+        }
 
-            if (currentBook != null)
+        private void BtnBack_Click(object sender, RoutedEventArgs e) => NavigationService.GoBack();
+
+        private void BtnSendReview_Click(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(TbReviewText.Text)) return;
+
+            var review = new Review
             {
-                // Здесь будет привязка данных к элементам интерфейса
-                // Например: this.DataContext = currentBook;
+                UserId = Core.CurrentUser.Id,
+                BookId = _currentBook.Id,
+                Text = TbReviewText.Text,
+                Rating = (int)SliderRating.Value,
+                CreatedAt = DateTime.Now
+            };
+
+            Core.Context.Reviews.Add(review);
+            Core.Context.SaveChanges();
+
+            TbReviewText.Clear();
+            LoadReviews();
+            MessageBox.Show("Отзыв добавлен!");
+        }
+
+        private void BtnRead_Click(object sender, RoutedEventArgs e)
+        {
+            // Можно просто показать MessageBox с Content или открыть новую страницу
+            MessageBox.Show(_currentBook.Content, "Чтение: " + _currentBook.Title);
+        }
+
+        // Добавление книги в список (чтение, планы и т.д.)
+        private void BtnAddToList_Click(object sender, RoutedEventArgs e)
+        {
+            // Логику выбора конкретного списка (статуса) можно сделать через ContextMenu или простое окно
+            // Для прототипа добавим в "Читаю" по умолчанию
+            var existingRecord = Core.Context.ReadingLists
+                .FirstOrDefault(rl => rl.UserId == Core.CurrentUser.Id && rl.BookId == _currentBook.Id);
+
+            if (existingRecord == null)
+            {
+                Core.Context.ReadingLists.Add(new ReadingList
+                {
+                    UserId = Core.CurrentUser.Id,
+                    BookId = _currentBook.Id,
+                    Status = "Читаю"
+                });
+                Core.Context.SaveChanges();
+                MessageBox.Show("Добавлено в список 'Читаю'");
             }
+            else
+            {
+                MessageBox.Show("Книга уже есть в ваших списках");
+            }
+        }
+
+        // Жалоба на отзыв
+        private void BtnReportReview_Click(object sender, RoutedEventArgs e)
+        {
+            var review = (Review)((Button)sender).DataContext;
+            Core.Context.Complaints.Add(new Complaint
+            {
+                UserId = Core.CurrentUser.Id,
+                ReviewId = review.Id,
+                Reason = "Жалоба на отзыв"
+            });
+            Core.Context.SaveChanges();
+            MessageBox.Show("Жалоба на отзыв отправлена");
+        }
+
+        // Жалоба на книгу
+        private void BtnComplaintBook_Click(object sender, RoutedEventArgs e)
+        {
+            Core.Context.Complaints.Add(new Complaint
+            {
+                UserId = Core.CurrentUser.Id,
+                BookId = _currentBook.Id,
+                Reason = "Жалоба на книгу"
+            });
+            Core.Context.SaveChanges();
+            MessageBox.Show("Жалоба на книгу отправлена");
+        }
+
+        // Жалоба на автора
+        private void BtnComplaintAuthor_Click(object sender, RoutedEventArgs e)
+        {
+            Core.Context.Complaints.Add(new Complaint
+            {
+                UserId = Core.CurrentUser.Id,
+                Reason = "Жалоба на автора: " + _currentBook.User.Login
+                // В таблице Complaints нет прямой связи с автором, поэтому пишем в Reason
+            });
+            Core.Context.SaveChanges();
+            MessageBox.Show("Жалоба на автора отправлена");
         }
     }
 }

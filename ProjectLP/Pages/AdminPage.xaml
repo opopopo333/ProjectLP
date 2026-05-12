@@ -8,7 +8,84 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="AdminPage">
 
-    <Grid>
-        
+    <Grid Margin="10">
+        <TabControl>
+            <!-- 1. ЖАЛОБЫ -->
+            <TabItem Header="Жалобы">
+                <DataGrid x:Name="DgComplaints" AutoGenerateColumns="False" CanUserAddRows="False">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="От кого" Binding="{Binding Users.Login}" Width="*"/>
+                        <DataGridTextColumn Header="Суть" Binding="{Binding Reason}" Width="2*"/>
+                        <DataGridTemplateColumn Header="Действия">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Button Content="Удалить объект" Click="BtnDeleteObject_Click" Background="Crimson" Foreground="White" Margin="2"/>
+                                        <Button Content="Отклонить" Click="BtnDismissComplaint_Click" Margin="2"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
+
+            <!-- 2. ЗАЯВКИ НА АВТОРА -->
+            <TabItem Header="Заявки: Авторы">
+                <DataGrid x:Name="DgAuthorRequests" AutoGenerateColumns="False" CanUserAddRows="False">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Пользователь" Binding="{Binding Users.Login}" Width="*"/>
+                        <DataGridTextColumn Header="Дата" Binding="{Binding CreatedAt}" Width="*"/>
+                        <DataGridTemplateColumn>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Button Content="Одобрить" Click="BtnAcceptAuthor_Click" Background="Green" Foreground="White" Margin="2"/>
+                                        <Button Content="Отказать" Click="BtnDeclineAuthor_Click" Margin="2"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
+
+            <!-- 3. УПРАВЛЕНИЕ ПОЛЬЗОВАТЕЛЯМИ -->
+            <TabItem Header="Пользователи">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBox x:Name="TbUserSearch" Margin="5" TextChanged="TbUserSearch_TextChanged" Tag="Поиск по логину..."/>
+                    <DataGrid x:Name="DgUsers" Grid.Row="1" AutoGenerateColumns="False" CanUserAddRows="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Логин" Binding="{Binding Login}" Width="*"/>
+                            <DataGridTextColumn Header="Роль" Binding="{Binding Role.Name}" Width="*"/>
+                            <DataGridTemplateColumn Header="Действия">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Button Content="Сменить пароль" Click="BtnChangePass_Click" Margin="2"/>
+                                            <ComboBox x:Name="CbRoles" SelectionChanged="CbRole_SelectionChanged" Margin="2"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+
+            <!-- 4. ЗАМОРОЗКА -->
+            <TabItem Header="Замороженные">
+                <StackPanel>
+                    <TextBlock Text="Замороженные книги" FontWeight="Bold" Margin="5"/>
+                    <ListBox x:Name="LbFrozenBooks" Height="100" DisplayMemberPath="Title"/>
+                    <TextBlock Text="Замороженные пользователи" FontWeight="Bold" Margin="5"/>
+                    <ListBox x:Name="LbFrozenUsers" Height="100" DisplayMemberPath="Login"/>
+                </StackPanel>
+            </TabItem>
+        </TabControl>
     </Grid>
 </Page>

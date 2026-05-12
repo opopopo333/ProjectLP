@@ -8,7 +8,92 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="BookDetailsPage">
 
-    <Grid>
-        
+    <Grid Background="White">
+        <ScrollViewer>
+            <StackPanel Margin="20">
+                <!-- Кнопка назад -->
+                <Button Content="← Назад" HorizontalAlignment="Left" Click="BtnBack_Click" Margin="0,0,0,20"/>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="300"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Обложка -->
+                    <Image Source="{Binding CoverPath}" Height="400" Stretch="Uniform" Grid.Column="0"/>
+
+                    <!-- Краткая инфа -->
+                    <StackPanel Grid.Column="1" Margin="20,0,0,0">
+                        <TextBlock Text="{Binding Title}" FontSize="32" FontWeight="Bold" TextWrapping="Wrap"/>
+                        <TextBlock Text="{Binding Users.DisplayName}" FontSize="20" FontStyle="Italic" Margin="0,5"/>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,10">
+                            <TextBlock Text="Жанры: " FontWeight="Bold"/>
+                            <!-- Для вывода списка жанров через запятую -->
+                            <ItemsControl ItemsSource="{Binding Genres}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel Orientation="Horizontal"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Name}" Margin="0,0,5,0"/>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+
+                        <TextBlock Text="Описание:" FontWeight="Bold" Margin="0,10,0,5"/>
+                        <TextBlock Text="{Binding Description}" TextWrapping="Wrap" FontSize="14"/>
+
+                        <!-- Кнопки действий -->
+                        <StackPanel Orientation="Horizontal" Margin="0,20">
+                            <Button Content="Читать книгу" Width="150" Height="40" Background="#27AE60" Foreground="White" Click="BtnRead_Click"/>
+                            <Button Content="Добавить в список" Width="150" Height="40" Margin="10,0" Click="BtnAddToList_Click"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal">
+                            <Button Content="Жалоба на книгу" Foreground="Red" Click="BtnComplaintBook_Click"/>
+                            <Button Content="Жалоба на автора" Foreground="Red" Margin="10,0" Click="BtnComplaintAuthor_Click"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+
+                <Separator Margin="0,30"/>
+
+                <!-- Секция отзывов -->
+                <TextBlock Text="Отзывы читателей" FontSize="24" Margin="0,0,0,15"/>
+
+                <!-- Форма добавления отзыва (скрыть, если аккаунт заморожен) -->
+                <StackPanel x:Name="PanelAddReview" Margin="0,0,0,20">
+                    <TextBox x:Name="TbReviewText" Height="80" TextWrapping="Wrap" AcceptsReturn="True" Tag="Напишите ваш отзыв..."/>
+                    <StackPanel Orientation="Horizontal" Margin="0,5">
+                        <TextBlock Text="Оценка (1-10): " VerticalAlignment="Center"/>
+                        <Slider x:Name="SliderRating" Minimum="1" Maximum="10" Width="200" TickPlacement="BottomRight" IsSnapToTickEnabled="True"/>
+                        <TextBlock Text="{Binding ElementName=SliderRating, Path=Value}" Margin="10,0" VerticalAlignment="Center"/>
+                        <Button Content="Отправить" Width="100" Click="BtnSendReview_Click"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <ItemsControl x:Name="IcReviews">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border BorderBrush="LightGray" BorderThickness="1" Margin="0,5" Padding="10" CornerRadius="5">
+                                <StackPanel>
+                                    <Grid>
+                                        <TextBlock Text="{Binding Users.DisplayName}" FontWeight="Bold"/>
+                                        <TextBlock Text="{Binding Rating, StringFormat='Оценка: {0}/10'}" HorizontalAlignment="Right" Foreground="OrangeRed"/>
+                                    </Grid>
+                                    <TextBlock Text="{Binding Text}" TextWrapping="Wrap" Margin="0,5"/>
+                                    <Button Content="Пожаловаться" HorizontalAlignment="Left" FontSize="10" Click="BtnReportReview_Click" Tag="{Binding Id}"/>
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
 </Page>
