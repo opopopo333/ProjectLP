@@ -24,5 +24,37 @@ namespace ProjectLP.Pages
         {
             InitializeComponent();
         }
+        private void RefreshData()
+        {
+            DgAuthorBooks.ItemsSource = Core.Context.Books
+                .Where(b => b.AuthorId == Core.CurrentUser.Id)
+                .ToList();
+        }
+
+        private void BtnAddBook_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new AddEditBookPage(null));
+        }
+
+        private void BtnEditBook_Click(object sender, RoutedEventArgs e)
+        {
+            var selectedBook = (sender as Button).DataContext as Book;
+            if (selectedBook != null)
+            {
+                NavigationService.Navigate(new AddEditBookPage(selectedBook));
+            }
+        }
+
+
+
+        private void BtnEditText_Click(object sender, RoutedEventArgs e)
+        {
+            var selectedBook = (sender as Button).DataContext as Book;
+
+            if (selectedBook != null)
+            {
+                MessageBox.Show($"Здесь будет открыто окно редактирования текста для книги: {selectedBook.Title}");
+            }
+        }
     }
 }

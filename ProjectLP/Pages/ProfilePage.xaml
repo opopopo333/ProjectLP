@@ -6,9 +6,91 @@
       xmlns:local="clr-namespace:ProjectLP.Pages"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="ProfilePage">
+      Title="ProfilePage"
+      Loaded="Page_Loaded">
 
-    <Grid>
-        
+    <Grid Margin="20">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="300"/>
+            <!-- Инфо -->
+            <ColumnDefinition Width="*"/>
+            <!-- Отзывы -->
+        </Grid.ColumnDefinitions>
+
+        <!-- ЛЕВАЯ ПАНЕЛЬ: ИНФО -->
+        <StackPanel Grid.Column="0" Margin="0,0,20,0">
+
+            <!-- БЛОК ЗАМОРОЗКИ (Виден только если IsFrozen == true) -->
+
+            <!-- БЛОК ЗАМОРОЗКИ (Виден только если IsFrozen == true) -->
+
+            <!-- БЛОК ЗАМОРОЗКИ (Виден только если IsFrozen == true) -->
+
+            <!-- БЛОК ЗАМОРОЗКИ (Виден только если IsFrozen == true) -->
+
+            <!-- БЛОК ЗАМОРОЗКИ (Виден только если IsFrozen == true) -->
+
+            <!-- БЛОК ЗАМОРОЗКИ (Виден только если IsFrozen == true) -->
+
+            <!-- БЛОК ЗАМОРОЗКИ (Виден только если IsFrozen == true) -->
+            <Border Background="#f9f9f9" Padding="20" CornerRadius="10">
+                <StackPanel>
+                    <Ellipse Width="100" Height="100" Fill="LightGray" Margin="0,0,0,15"/>
+
+                    <TextBlock Text="Имя пользователя:" FontSize="12" Foreground="Gray"/>
+                    <TextBlock x:Name="TxtDisplayName" FontSize="18" FontWeight="Bold" Margin="0,0,0,10"/>
+
+                    <TextBlock Text="Логин:" FontSize="12" Foreground="Gray"/>
+                    <TextBlock x:Name="TxtLogin" FontSize="16" Margin="0,0,0,10"/>
+
+                    <TextBlock Text="Email:" FontSize="12" Foreground="Gray"/>
+                    <TextBlock x:Name="TxtEmail" FontSize="16" Margin="0,0,0,10"/>
+
+                    <TextBlock Text="Ваша роль:" FontSize="12" Foreground="Gray"/>
+                    <TextBlock x:Name="TxtRole" FontSize="16" FontWeight="Bold" Foreground="DarkSlateBlue" Margin="0,0,0,20"/>
+
+                    <!-- Кнопка заявки на Автора -->
+                    <Button x:Name="BtnRequestAuthor" Content="Стать автором" Click="BtnRequestAuthor_Click" 
+                            Height="35" Background="#3498DB" Foreground="White" Visibility="Collapsed"/>
+                </StackPanel>
+            </Border>
+
+            <!-- БЛОК ЗАМОРОЗКИ (Виден только если IsFrozen == true) -->
+            <Border x:Name="BorderFrozen" Background="#FDEDEC" BorderBrush="#E74C3C" BorderThickness="1" 
+                    Margin="0,20,0,0" Padding="15" CornerRadius="10" Visibility="Collapsed">
+                <StackPanel>
+                    <TextBlock Text="ВАШ АККАУНТ ЗАМОРОЖЕН" Foreground="#E74C3C" FontWeight="Bold" HorizontalAlignment="Center"/>
+                    <TextBlock Text="Вы не можете оставлять отзывы и публиковать книги." TextWrapping="Wrap" Margin="0,10" FontSize="11"/>
+                    <Button Content="Оспорить заморозку" Click="BtnUnfreeze_Click" Background="White" BorderBrush="#E74C3C"/>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+
+        <!-- ПРАВАЯ ПАНЕЛЬ: МОИ ОТЗЫВЫ -->
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="Мои отзывы" FontSize="20" FontWeight="Bold" Margin="0,0,0,15"/>
+
+            <ListView x:Name="LvMyReviews" Grid.Row="1" BorderThickness="0">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderBrush="#EEEEEE" BorderThickness="0,0,0,1" Padding="10">
+                            <StackPanel>
+                                <TextBlock Text="{Binding Books.Title}" FontWeight="Bold" Foreground="#2980B9"/>
+                                <TextBlock Text="{Binding Text}" TextWrapping="Wrap" Margin="0,5"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding Rating, StringFormat='Оценка: {0}/10'}" FontSize="11" Foreground="OrangeRed"/>
+                                    <TextBlock Text="{Binding CreatedAt, StringFormat=' ({0:dd.MM.yyyy})'}" FontSize="11" Foreground="Gray"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </Grid>
     </Grid>
 </Page>

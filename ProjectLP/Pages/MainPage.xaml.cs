@@ -29,33 +29,36 @@ namespace ProjectLP.Pages
         {
             var user = Core.CurrentUser;
 
-            // 1. Проверяем заморозку
-            if (user.IsFrozen)
-            {
-                BtnFrozen.Visibility = Visibility.Visible;
-            }
+            if (user == null) return;
 
-            // 2. Проверяем роль (в БД Roles: 1-Админ, 2-Автор, 3-Пользователь)
-            // Используй имена или ID из твоей таблицы Roles
-            if (user.Role.Name == "Администратор")
+            BtnAdmin.Visibility = Visibility.Collapsed;
+            BtnAuthor.Visibility = Visibility.Collapsed;
+
+            if (user.RoleId == 1)
             {
                 BtnAdmin.Visibility = Visibility.Visible;
             }
-
-            if (user.Role.Name == "Автор")
+            else if (user.RoleId == 2)
             {
                 BtnAuthor.Visibility = Visibility.Visible;
             }
 
-            // По умолчанию открываем каталог
+            BtnFrozen.Visibility = user.IsFrozen ? Visibility.Visible : Visibility.Collapsed;
+
+            if (ActiveFrame.Content == null)
+                ActiveFrame.Navigate(new CatalogPage());
+        }
+
+
+        private void BtnCatalog_Click(object sender, RoutedEventArgs e)
+        {
             ActiveFrame.Navigate(new CatalogPage());
         }
 
-        // Обработчики кликов (пока просто навигация)
-        private void BtnCatalog_Click(object sender, RoutedEventArgs e) => ActiveFrame.Navigate(new CatalogPage());
-        private void BtnProfile_Click(object sender, RoutedEventArgs e) => ActiveFrame.Navigate(new ProfilePage());
-        // ... остальные методы по аналогии
-        
+        private void BtnProfile_Click(object sender, RoutedEventArgs e)
+        {
+            ActiveFrame.Navigate(new ProfilePage());
+        }
 
         private void BtnLists_Click(object sender, RoutedEventArgs e)
         {
@@ -72,13 +75,16 @@ namespace ProjectLP.Pages
             ActiveFrame.Navigate(new AdminPage());
         }
 
-        // Тот самый метод, которого не хватало
         private void BtnFrozen_Click(object sender, RoutedEventArgs e)
         {
-            // Обычно при клике на варнинг открываем страницу с деталями заморозки
             ActiveFrame.Navigate(new FrozenWarningPage());
         }
 
-
+        // Кнопка выхода (если есть в XAML)
+        private void BtnExit_Click(object sender, RoutedEventArgs e)
+        {
+            Core.CurrentUser = null;
+            NavigationService.Navigate(new LoginPage());
+        }
     }
 }

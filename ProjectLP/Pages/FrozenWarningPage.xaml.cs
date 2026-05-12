@@ -24,5 +24,44 @@ namespace ProjectLP.Pages
         {
             InitializeComponent();
         }
+
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            var user = Core.CurrentUser;
+        }
+
+        private void BtnSendAppeal_Click(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(TbAppeal.Text))
+            {
+                MessageBox.Show("Пожалуйста, напишите текст апелляции.");
+                return;
+            }
+
+            try
+            {
+                var request = new UnfreezeRequest
+                {
+                    UserId = Core.CurrentUser.Id,
+                    Reason = TbAppeal.Text,
+                    CreatedAt = DateTime.Now
+                };
+
+                Core.Context.UnfreezeRequests.Add(request);
+                Core.Context.SaveChanges();
+
+                MessageBox.Show("Ваша апелляция отправлена администратору!");
+                NavigationService.GoBack();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Ошибка: проверьте названия полей в БД. " + ex.Message);
+            }
+        }
+
+        private void BtnBack_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new CatalogPage());
+        }
     }
 }

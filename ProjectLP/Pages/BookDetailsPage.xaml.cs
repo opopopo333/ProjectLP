@@ -125,7 +125,6 @@ namespace ProjectLP.Pages
             {
                 UserId = Core.CurrentUser.Id,
                 Reason = "Жалоба на автора: " + _currentBook.User.Login
-                // В таблице Complaints нет прямой связи с автором, поэтому пишем в Reason
             });
             Core.Context.SaveChanges();
             MessageBox.Show("Жалоба на автора отправлена");

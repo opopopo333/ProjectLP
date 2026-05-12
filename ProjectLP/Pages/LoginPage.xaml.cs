@@ -12,7 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-
+using System.Data.Entity;
 namespace ProjectLP.Pages
 {
     /// <summary>
@@ -30,15 +30,11 @@ namespace ProjectLP.Pages
             string login = TbLogin.Text;
             string password = PbPassword.Password;
 
-            // Ищем пользователя в БД
-            var user = Core.Context.Users.FirstOrDefault(u => u.Login == login && u.Password == password);
+            var user = Core.Context.Users.Include(u => u.Role).FirstOrDefault(u => u.Login == login && u.Password == password);
 
             if (user != null)
             {
-                // Сохраняем пользователя в глобальную переменную
                 Core.CurrentUser = user;
-
-                // Переходим на главную страницу (её создадим следующим шагом)
                 NavigationService.Navigate(new MainPage());
             }
             else
@@ -49,9 +45,8 @@ namespace ProjectLP.Pages
 
         private void BtnReg_Click(object sender, RoutedEventArgs e)
         {
-            // Пока оставим пустым или выведем сообщение
-            MessageBox.Show("Переход к регистрации");
-            // В будущем здесь будет: NavigationService.Navigate(new RegistrationPage());
+
+            NavigationService.Navigate(new RegistrationPage());
         }
 
 

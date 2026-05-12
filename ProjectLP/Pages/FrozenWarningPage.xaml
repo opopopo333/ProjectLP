@@ -8,7 +8,28 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="FrozenWarningPage">
 
-    <Grid>
-        
+    <Grid Background="#FDEDEC">
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" MaxWidth="500">
+            <!-- Иконка или заголовок -->
+            <TextBlock Text="⚠" FontSize="72" Foreground="#E74C3C" HorizontalAlignment="Center"/>
+            <TextBlock Text="Ваш аккаунт заморожен" FontSize="28" FontWeight="Bold" Foreground="#C0392B" HorizontalAlignment="Center"/>
+
+            <Border Background="White" Margin="0,20" Padding="20" CornerRadius="10" BorderBrush="#E74C3C" BorderThickness="1">
+                <StackPanel>
+                    <TextBlock Text="Причина заморозки:" FontWeight="Bold" Margin="0,0,0,5"/>
+                    <TextBlock x:Name="TxtReason" Text="Причина не указана. Обратитесь к администратору." 
+                               TextWrapping="Wrap" FontStyle="Italic" Margin="0,0,0,15"/>
+
+                    <TextBlock Text="Оспорить решение:" FontWeight="Bold" Margin="0,10,0,5"/>
+                    <TextBox x:Name="TbAppeal" Height="100" TextWrapping="Wrap" AcceptsReturn="True" 
+                             Tag="Опишите, почему мы должны разморозить ваш аккаунт..."/>
+
+                    <Button Content="Отправить апелляцию" Click="BtnSendAppeal_Click" 
+                            Margin="0,15,0,0" Height="35" Background="#E74C3C" Foreground="White" FontWeight="Bold"/>
+                </StackPanel>
+            </Border>
+
+            <Button Content="Вернуться в каталог" Click="BtnBack_Click" Background="Transparent" BorderThickness="0" Foreground="#2980B9" Cursor="Hand"/>
+        </StackPanel>
     </Grid>
 </Page>

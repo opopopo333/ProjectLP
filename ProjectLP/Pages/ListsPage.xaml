@@ -8,7 +8,58 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="ListsPage">
 
-    <Grid>
-        
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <!-- Поиск и фильтры -->
+            <RowDefinition Height="*"/>
+            <!-- Контент -->
+        </Grid.RowDefinitions>
+
+        <!-- Панель управления (как в каталоге) -->
+        <StackPanel Orientation="Horizontal" Background="#F4F7F6" >
+            <TextBox x:Name="TbSearch" Width="200" Margin="5" TextChanged="UpdateData" Tag="Поиск в списках..."/>
+            <ComboBox x:Name="CbGenre" Width="150" Margin="5" SelectionChanged="UpdateData" DisplayMemberPath="Name"/>
+            <ComboBox x:Name="CbSort" Width="150" Margin="5" SelectionChanged="UpdateData">
+                <ComboBoxItem Content="Сортировка: А-Я"/>
+                <ComboBoxItem Content="Сортировка: Рейтинг"/>
+            </ComboBox>
+        </StackPanel>
+
+        <TabControl Grid.Row="1" x:Name="TabLists" SelectionChanged="UpdateData" Margin="0,10,0,0">
+            <TabItem Header="Читаю" Tag="Читаю"/>
+            <TabItem Header="В планах" Tag="В планах"/>
+            <TabItem Header="Прочитано" Tag="Прочитано"/>
+            <TabItem Header="Заброшено" Tag="Заброшено"/>
+        </TabControl>
+
+        <!-- Список книг (сетка) внутри основной области под табами -->
+        <ListView x:Name="LvBooks" Grid.Row="1" Margin="0,40,0,0" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center"/>
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Border BorderBrush="#DCDDE1" BorderThickness="1" CornerRadius="8" Margin="10" Width="180" Background="White">
+                        <StackPanel >
+                            <Image Source="{Binding Book.CoverPath}" Height="200" Stretch="UniformToFill"/>
+                            <TextBlock Text="{Binding Book.Title}" FontWeight="Bold" Margin="0,5" TextAlignment="Center" TextWrapping="Wrap"/>
+
+                            <!-- Смена статуса прямо из списка -->
+                            <ComboBox SelectedValue="{Binding Status}" SelectedValuePath="Content" SelectionChanged="CbChangeStatus_SelectionChanged" Tag="{Binding Id}">
+                                <ComboBoxItem Content="Читаю"/>
+                                <ComboBoxItem Content="В планах"/>
+                                <ComboBoxItem Content="Прочитано"/>
+                                <ComboBoxItem Content="Заброшено"/>
+                            </ComboBox>
+
+                            <Button Content="Открыть" Margin="0,5,0,0" Click="BtnOpenBook_Click" Tag="{Binding BookId}"/>
+                        </StackPanel>
+                    </Border>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
     </Grid>
 </Page>

@@ -8,7 +8,35 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="AuthorPage">
 
-    <Grid>
-        
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+            <TextBlock Text="Мои публикации" FontSize="24" FontWeight="Bold"/>
+            <Button Content="+ Опубликовать новую книгу" Click="BtnAddBook_Click" 
+                Padding="10,5" Margin="20,0,0,0" Background="#27AE60" Foreground="White"/>
+        </StackPanel>
+
+        <DataGrid x:Name="DgAuthorBooks" Grid.Row="1" Margin="0,20,0,0" 
+              AutoGenerateColumns="False" CanUserAddRows="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Название" Binding="{Binding Title}" Width="2*"/>
+                <DataGridTextColumn Header="Читателей" Binding="{Binding ReadingLists.Count}" Width="*"/>
+                <DataGridCheckBoxColumn Header="Заморожена" Binding="{Binding IsFrozen}" IsReadOnly="True"/>
+                <DataGridTemplateColumn Header="Действия">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <Button Content="Редактировать" Click="BtnEditBook_Click" Margin="2"/>
+                                <Button Content="Текст" Click="BtnEditText_Click" Margin="2"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
 </Page>
