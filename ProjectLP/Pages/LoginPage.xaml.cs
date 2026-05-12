@@ -39,7 +39,7 @@ namespace ProjectLP.Pages
                 Core.CurrentUser = user;
 
                 // Переходим на главную страницу (её создадим следующим шагом)
-                NavigationService.Navigate(new MainWindow());
+                NavigationService.Navigate(new MainPage());
             }
             else
             {
