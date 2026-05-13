@@ -47,7 +47,7 @@ namespace ProjectLP.Pages
 
             try
             {
-                var newUser = new User
+                var newUser = new Users
                 {
                     Login = TbLogin.Text,
                     Password = PbPassword.Password,

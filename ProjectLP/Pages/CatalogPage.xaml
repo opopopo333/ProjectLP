@@ -11,12 +11,9 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <!-- Панель инструментов -->
             <RowDefinition Height="*"/>
-            <!-- Список -->
         </Grid.RowDefinitions>
 
-        <!-- Панель инструментов -->
         <StackPanel Grid.Row="0" Orientation="Horizontal" Background="#ECF0F1" >
             <TextBox x:Name="TbSearch" Width="200" Margin="5" TextChanged="TbSearch_TextChanged" Tag="Поиск по названию/автору..."/>
 
@@ -28,7 +25,6 @@
             </ComboBox>
         </StackPanel>
 
-        <!-- Сетка книг -->
         <ListView x:Name="LvBooks" Grid.Row="1" d:ItemsSource="{d:SampleData ItemCount=5}" 
               ScrollViewer.HorizontalScrollBarVisibility="Disabled">
             <ListView.ItemsPanel>

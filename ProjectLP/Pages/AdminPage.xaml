@@ -15,12 +15,13 @@
                 <DataGrid x:Name="DgComplaints" AutoGenerateColumns="False" CanUserAddRows="False">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="От кого" Binding="{Binding Users.Login}" Width="*"/>
+                        <DataGridTextColumn Header="Тип объекта" Binding="{Binding TargetType}" Width="*"/>
                         <DataGridTextColumn Header="Суть" Binding="{Binding Reason}" Width="2*"/>
                         <DataGridTemplateColumn Header="Действия">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal">
-                                        <Button Content="Удалить объект" Click="BtnDeleteObject_Click" Background="Crimson" Foreground="White" Margin="2"/>
+                                        <Button Content="Заморозить/Удалить" Click="BtnDeleteObject_Click" Background="Crimson" Foreground="White" Margin="2"/>
                                         <Button Content="Отклонить" Click="BtnDismissComplaint_Click" Margin="2"/>
                                     </StackPanel>
                                 </DataTemplate>
@@ -30,13 +31,33 @@
                 </DataGrid>
             </TabItem>
 
-            <!-- 2. ЗАЯВКИ НА АВТОРА -->
+            <!-- 2. ЗАЯВКИ НА РАЗМОРОЗКУ (НОВОЕ) -->
+            <TabItem Header="Заявки: Разморозка">
+                <DataGrid x:Name="DgUnfreezeRequests" AutoGenerateColumns="False" CanUserAddRows="False">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Объект" Binding="{Binding TargetName}" Width="*"/>
+                        <DataGridTextColumn Header="Тип" Binding="{Binding TargetType}" Width="*"/>
+                        <DataGridTemplateColumn Header="Действия">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Button Content="Разморозить" Click="BtnAcceptUnfreeze_Click" Background="Green" Foreground="White" Margin="2"/>
+                                        <Button Content="Отклонить" Click="BtnDeclineUnfreeze_Click" Margin="2"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
+
+            <!-- 3. ЗАЯВКИ НА АВТОРА -->
             <TabItem Header="Заявки: Авторы">
                 <DataGrid x:Name="DgAuthorRequests" AutoGenerateColumns="False" CanUserAddRows="False">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Пользователь" Binding="{Binding Users.Login}" Width="*"/>
-                        <DataGridTextColumn Header="Дата" Binding="{Binding CreatedAt}" Width="*"/>
-                        <DataGridTemplateColumn>
+                        <DataGridTextColumn Header="Дата" Binding="{Binding CreatedAt, StringFormat=\{0:dd.MM.yyyy\}}" Width="*"/>
+                        <DataGridTemplateColumn Header="Действия">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal">
@@ -50,7 +71,7 @@
                 </DataGrid>
             </TabItem>
 
-            <!-- 3. УПРАВЛЕНИЕ ПОЛЬЗОВАТЕЛЯМИ -->
+            <!-- 4. УПРАВЛЕНИЕ ПОЛЬЗОВАТЕЛЯМИ -->
             <TabItem Header="Пользователи">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -61,14 +82,21 @@
                     <DataGrid x:Name="DgUsers" Grid.Row="1" AutoGenerateColumns="False" CanUserAddRows="False">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Логин" Binding="{Binding Login}" Width="*"/>
-                            <DataGridTextColumn Header="Роль" Binding="{Binding Role.Name}" Width="*"/>
+                            <DataGridTemplateColumn Header="Роль" Width="*">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <ComboBox ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=Page}, Path=AllRoles}" 
+                                              DisplayMemberPath="Name" 
+                                              SelectedValue="{Binding RoleId, UpdateSourceTrigger=PropertyChanged}" 
+                                              SelectedValuePath="Id"
+                                              SelectionChanged="CbRole_SelectionChanged"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
                             <DataGridTemplateColumn Header="Действия">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <StackPanel Orientation="Horizontal">
-                                            <Button Content="Сменить пароль" Click="BtnChangePass_Click" Margin="2"/>
-                                            <ComboBox x:Name="CbRoles" SelectionChanged="CbRole_SelectionChanged" Margin="2"/>
-                                        </StackPanel>
+                                        <Button Content="Сменить пароль" Click="BtnChangePass_Click" Margin="2"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -77,14 +105,20 @@
                 </Grid>
             </TabItem>
 
-            <!-- 4. ЗАМОРОЗКА -->
+            <!-- 5. ЗАМОРОЗКА -->
             <TabItem Header="Замороженные">
-                <StackPanel>
-                    <TextBlock Text="Замороженные книги" FontWeight="Bold" Margin="5"/>
-                    <ListBox x:Name="LbFrozenBooks" Height="100" DisplayMemberPath="Title"/>
-                    <TextBlock Text="Замороженные пользователи" FontWeight="Bold" Margin="5"/>
-                    <ListBox x:Name="LbFrozenUsers" Height="100" DisplayMemberPath="Login"/>
-                </StackPanel>
+                <ScrollViewer>
+                    <StackPanel Margin="5">
+                        <TextBlock Text="Замороженные книги" FontWeight="Bold" Margin="0,5"/>
+                        <ListBox x:Name="LbFrozenBooks" Height="100" DisplayMemberPath="Title"/>
+
+                        <TextBlock Text="Замороженные пользователи" FontWeight="Bold" Margin="0,10,0,5"/>
+                        <ListBox x:Name="LbFrozenUsers" Height="100" DisplayMemberPath="Login"/>
+
+                        <TextBlock Text="Замороженные отзывы" FontWeight="Bold" Margin="0,10,0,5"/>
+                        <ListBox x:Name="LbFrozenReviews" Height="100" DisplayMemberPath="Text"/>
+                    </StackPanel>
+                </ScrollViewer>
             </TabItem>
         </TabControl>
     </Grid>

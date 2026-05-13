@@ -25,7 +25,7 @@ namespace ProjectLP.Pages
             InitializeComponent();
 
             var genres = Core.Context.Genres.ToList();
-            genres.Insert(0, new Genre { Name = "Все жанры" }); 
+            genres.Insert(0, new Genres { Name = "Все жанры" }); 
             CbGenre.ItemsSource = genres;
             CbGenre.SelectedIndex = 0;
 
@@ -35,7 +35,7 @@ namespace ProjectLP.Pages
         private void UpdateData()
         {
             var query = Core.Context.Books
-                .Include(b => b.User) 
+                .Include(b => b.Users) 
                 .Include(b => b.Genres)
                 .Where(b => !b.IsFrozen)
                 .AsQueryable();
@@ -44,12 +44,12 @@ namespace ProjectLP.Pages
             {
                 string search = TbSearch.Text.ToLower();
                 query = query.Where(b => b.Title.ToLower().Contains(search) ||
-                                         b.User.DisplayName.ToLower().Contains(search));
+                                         b.Users.DisplayName.ToLower().Contains(search));
             }
 
             if (CbGenre.SelectedIndex > 0)
             {
-                int selectedGenreId = ((Genre)CbGenre.SelectedItem).Id;
+                int selectedGenreId = ((Genres)CbGenre.SelectedItem).Id;
                 query = query.Where(b => b.Genres.Any(g => g.Id == selectedGenreId));
             }
 

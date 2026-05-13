@@ -33,9 +33,9 @@ namespace ProjectLP.Pages
             TxtDisplayName.Text = user.DisplayName;
             TxtLogin.Text = user.Login;
             TxtEmail.Text = user.Email;
-            TxtRole.Text = user.Role?.Name ?? "Не определена";
+            TxtRole.Text = user.Roles?.Name ?? "Не определена";
 
-            if (user.Role?.Name == "Пользователь")
+            if (user.Roles?.Name == "Пользователь")
             {
                 BtnRequestAuthor.Visibility = Visibility.Visible;
             }
@@ -53,7 +53,7 @@ namespace ProjectLP.Pages
         private void LoadMyReviews()
         {
             LvMyReviews.ItemsSource = Core.Context.Reviews
-                .Include(r => r.Book) 
+                .Include(r => r.Books) 
                 .Where(r => r.UserId == Core.CurrentUser.Id)
                 .OrderByDescending(r => r.CreatedAt)
                 .ToList();
@@ -70,7 +70,7 @@ namespace ProjectLP.Pages
                 return;
             }
 
-            Core.Context.RoleRequests.Add(new RoleRequest
+            Core.Context.RoleRequests.Add(new RoleRequests
             {
                 UserId = Core.CurrentUser.Id,
                 CreatedAt = DateTime.Now,
@@ -86,7 +86,7 @@ namespace ProjectLP.Pages
         private void BtnUnfreeze_Click(object sender, RoutedEventArgs e)
         {
 
-            Core.Context.UnfreezeRequests.Add(new UnfreezeRequest
+            Core.Context.UnfreezeRequests.Add(new UnfreezeRequests
             {
                 UserId = Core.CurrentUser.Id,
                 Reason = "Пользователь просит разблокировки через профиль",

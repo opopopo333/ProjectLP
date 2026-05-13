@@ -20,15 +20,20 @@ namespace ProjectLP.Pages
     /// </summary>
     public partial class BookDetailsPage : Page
     {
-        private Book _currentBook;
+        private Books _currentBook;
 
         public BookDetailsPage(int bookId)
         {
             InitializeComponent();
             _currentBook = Core.Context.Books.FirstOrDefault(b => b.Id == bookId);
             this.DataContext = _currentBook;
-
+            UpdateRating();
             LoadReviews();
+            if (Core.CurrentUser?.RoleId == 1)
+            {
+                BtnFreezeBook.Visibility = Visibility.Visible;
+                BtnFreezeBook.Content = _currentBook.IsFrozen ? "Разморозить книгу" : "Заморозить книгу";
+            }
         }
 
         private void LoadReviews()
@@ -43,7 +48,7 @@ namespace ProjectLP.Pages
         {
             if (string.IsNullOrWhiteSpace(TbReviewText.Text)) return;
 
-            var review = new Review
+            var review = new Reviews
             {
                 UserId = Core.CurrentUser.Id,
                 BookId = _currentBook.Id,
@@ -76,7 +81,7 @@ namespace ProjectLP.Pages
 
             if (existingRecord == null)
             {
-                Core.Context.ReadingLists.Add(new ReadingList
+                Core.Context.ReadingLists.Add(new ReadingLists
                 {
                     UserId = Core.CurrentUser.Id,
                     BookId = _currentBook.Id,
@@ -91,11 +96,10 @@ namespace ProjectLP.Pages
             }
         }
 
-        // Жалоба на отзыв
         private void BtnReportReview_Click(object sender, RoutedEventArgs e)
         {
-            var review = (Review)((Button)sender).DataContext;
-            Core.Context.Complaints.Add(new Complaint
+            var review = (Reviews)((Button)sender).DataContext;
+            Core.Context.Complaints.Add(new Complaints
             {
                 UserId = Core.CurrentUser.Id,
                 ReviewId = review.Id,
@@ -105,10 +109,9 @@ namespace ProjectLP.Pages
             MessageBox.Show("Жалоба на отзыв отправлена");
         }
 
-        // Жалоба на книгу
         private void BtnComplaintBook_Click(object sender, RoutedEventArgs e)
         {
-            Core.Context.Complaints.Add(new Complaint
+            Core.Context.Complaints.Add(new Complaints
             {
                 UserId = Core.CurrentUser.Id,
                 BookId = _currentBook.Id,
@@ -118,16 +121,61 @@ namespace ProjectLP.Pages
             MessageBox.Show("Жалоба на книгу отправлена");
         }
 
-        // Жалоба на автора
         private void BtnComplaintAuthor_Click(object sender, RoutedEventArgs e)
         {
-            Core.Context.Complaints.Add(new Complaint
+            Core.Context.Complaints.Add(new Complaints
             {
                 UserId = Core.CurrentUser.Id,
-                Reason = "Жалоба на автора: " + _currentBook.User.Login
+                Reason = "Жалоба на автора: " + _currentBook.Users.Login
             });
             Core.Context.SaveChanges();
             MessageBox.Show("Жалоба на автора отправлена");
+        }
+
+        private void UpdateRating()
+        {
+            try
+            {
+                var reviews = Core.Context.Reviews.Where(r => r.BookId == _currentBook.Id).ToList();
+
+                if (reviews.Count > 0)
+                {
+
+                    double average = reviews.Average(r => (double)r.Rating);
+
+                    TxtRatingValue.Text = average.ToString("0.0");
+                    TxtReviewCount.Text = $"({reviews.Count} отзывов)";
+
+                }
+                else
+                {
+                    TxtRatingValue.Text = "0.0";
+                    TxtReviewCount.Text = "(нет отзывов)";
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("Ошибка рейтинга: " + ex.Message);
+            }
+        }
+
+        // Заморозка книги
+        private void BtnFreezeBook_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                // Переключаем статус (если была true, станет false и наоборот)
+                _currentBook.IsFrozen = !_currentBook.IsFrozen;
+
+                Core.Context.SaveChanges();
+
+                MessageBox.Show(_currentBook.IsFrozen ? "Книга заморожена" : "Книга разморожена");
+                BtnFreezeBook.Content = _currentBook.IsFrozen ? "Разморозить книгу" : "Заморозить книгу";
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Ошибка: " + ex.Message);
+            }
         }
     }
 }

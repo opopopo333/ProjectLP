@@ -38,7 +38,7 @@ namespace ProjectLP.Pages
 
         private void BtnEditBook_Click(object sender, RoutedEventArgs e)
         {
-            var selectedBook = (sender as Button).DataContext as Book;
+            var selectedBook = (sender as Button).DataContext as Books;
             if (selectedBook != null)
             {
                 NavigationService.Navigate(new AddEditBookPage(selectedBook));
@@ -49,7 +49,7 @@ namespace ProjectLP.Pages
 
         private void BtnEditText_Click(object sender, RoutedEventArgs e)
         {
-            var selectedBook = (sender as Button).DataContext as Book;
+            var selectedBook = (sender as Button).DataContext as Books;
 
             if (selectedBook != null)
             {

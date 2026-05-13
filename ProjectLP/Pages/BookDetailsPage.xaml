@@ -13,23 +13,31 @@
             <StackPanel Margin="20">
                 <!-- Кнопка назад -->
                 <Button Content="← Назад" HorizontalAlignment="Left" Click="BtnBack_Click" Margin="0,0,0,20"/>
-
+                
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="300"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-
+                    
                     <!-- Обложка -->
                     <Image Source="{Binding CoverPath}" Height="400" Stretch="Uniform" Grid.Column="0"/>
 
                     <!-- Краткая инфа -->
+                    
+                    
                     <StackPanel Grid.Column="1" Margin="20,0,0,0">
                         <TextBlock Text="{Binding Title}" FontSize="32" FontWeight="Bold" TextWrapping="Wrap"/>
                         <TextBlock Text="{Binding Users.DisplayName}" FontSize="20" FontStyle="Italic" Margin="0,5"/>
-
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                            <TextBlock Text="Рейтинг: " FontSize="12" VerticalAlignment="Center" FontWeight="Bold"/>
+                            <!-- Сюда выведем среднее число (например, 4.5) -->
+                            <TextBlock x:Name="TxtRatingValue" Text="0.0" FontSize="20" FontWeight="Bold" Foreground="#F1C40F" Margin="5,0,10,0"/>
+                            <TextBlock x:Name="TxtReviewCount" Text="(0 отзывов)" FontSize="14" Foreground="Gray" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                        </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="0,10">
                             <TextBlock Text="Жанры: " FontWeight="Bold"/>
+                            
                             <!-- Для вывода списка жанров через запятую -->
                             <ItemsControl ItemsSource="{Binding Genres}">
                                 <ItemsControl.ItemsPanel>
@@ -44,6 +52,7 @@
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
                         </StackPanel>
+                        
 
                         <TextBlock Text="Описание:" FontWeight="Bold" Margin="0,10,0,5"/>
                         <TextBlock Text="{Binding Description}" TextWrapping="Wrap" FontSize="14"/>
@@ -57,6 +66,8 @@
                         <StackPanel Orientation="Horizontal">
                             <Button Content="Жалоба на книгу" Foreground="Red" Click="BtnComplaintBook_Click"/>
                             <Button Content="Жалоба на автора" Foreground="Red" Margin="10,0" Click="BtnComplaintAuthor_Click"/>
+                            <!-- Кнопка заморозки книги -->
+                            <Button x:Name="BtnFreezeBook" Content="Заморозить книгу" Click="BtnFreezeBook_Click" Visibility="Collapsed" Background="#E74C3C" Foreground="White" Padding="10,5" Margin="0,0,0,10"/>
                         </StackPanel>
                     </StackPanel>
                 </Grid>

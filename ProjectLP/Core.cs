@@ -9,7 +9,7 @@ namespace ProjectLP
 {
     public static class Core
     {
-        public static UlianenkoprEntities Context = new UlianenkoprEntities();
-        public static User CurrentUser { get; set; }
+        public static UlianenkoprEntities2 Context = new UlianenkoprEntities2();
+        public static Users CurrentUser { get; set; }
     }
 }

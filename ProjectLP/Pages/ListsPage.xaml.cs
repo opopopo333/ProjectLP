@@ -26,7 +26,7 @@ namespace ProjectLP.Pages
 
             // Загрузка жанров для фильтрации
             var genres = Core.Context.Genres.ToList();
-            genres.Insert(0, new Genre { Name = "Все жанры" });
+            genres.Insert(0, new Genres { Name = "Все жанры" });
             CbGenre.ItemsSource = genres;
             CbGenre.SelectedIndex = 0;
         }
@@ -52,21 +52,21 @@ namespace ProjectLP.Pages
             if (!string.IsNullOrWhiteSpace(TbSearch.Text))
             {
                 string search = TbSearch.Text.ToLower();
-                query = query.Where(rl => rl.Book.Title.ToLower().Contains(search) ||
-                                         rl.Book.User.DisplayName.ToLower().Contains(search));
+                query = query.Where(rl => rl.Books.Title.ToLower().Contains(search) ||
+                                         rl.Books.Users.DisplayName.ToLower().Contains(search));
             }
             
             if (CbGenre.SelectedIndex > 0)
             {
-                int gId = ((Genre)CbGenre.SelectedItem).Id;
-                query = query.Where(rl => rl.Book.Genres.Any(g => g.Id == gId));
+                int gId = ((Genres)CbGenre.SelectedItem).Id;
+                query = query.Where(rl => rl.Books.Genres.Any(g => g.Id == gId));
             }
 
             var list = query.ToList();
 
-            if (CbSort.SelectedIndex == 0) list = list.OrderBy(x => x.Book.Title).ToList();
+            if (CbSort.SelectedIndex == 0) list = list.OrderBy(x => x.Books.Title).ToList();
             else if (CbSort.SelectedIndex == 1)
-                list = list.OrderByDescending(x => x.Book.Reviews.Any() ? x.Book.Reviews.Average(r => r.Rating) : 0).ToList();
+                list = list.OrderByDescending(x => x.Books.Reviews.Any() ? x.Books.Reviews.Average(r => r.Rating) : 0).ToList();
 
             LvBooks.ItemsSource = list;
         }

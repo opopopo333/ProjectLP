@@ -30,7 +30,7 @@ namespace ProjectLP.Pages
             string login = TbLogin.Text;
             string password = PbPassword.Password;
 
-            var user = Core.Context.Users.Include(u => u.Role).FirstOrDefault(u => u.Login == login && u.Password == password);
+            var user = Core.Context.Users.Include(u => u.Roles).FirstOrDefault(u => u.Login == login && u.Password == password);
 
             if (user != null)
             {

@@ -4,17 +4,16 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="ffc0005d913c48a7ad65c748cfb06a2f" Name="Diagram1">
-        <EntityTypeShape EntityType="UlianenkoprModel.Book" Width="1.5" PointX="5.25" PointY="7.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="UlianenkoprModel.Complaint" Width="1.5" PointX="7.5" PointY="7.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="UlianenkoprModel.Genre" Width="1.5" PointX="7.5" PointY="11.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="UlianenkoprModel.ReadingList" Width="1.5" PointX="10.5" PointY="8.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="UlianenkoprModel.Review" Width="1.5" PointX="10.5" PointY="4.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="UlianenkoprModel.RoleRequest" Width="1.5" PointX="5.25" PointY="11.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="UlianenkoprModel.Role" Width="1.5" PointX="0.75" PointY="9.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="UlianenkoprModel.sysdiagram" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="UlianenkoprModel.UnfreezeRequest" Width="1.5" PointX="10.5" PointY="11.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="UlianenkoprModel.User" Width="1.5" PointX="3" PointY="8.5" IsExpanded="true" />
+      <Diagram DiagramId="011bbd78ebc04b8397eaec7f87cdf3a4" Name="Diagram1">
+        <EntityTypeShape EntityType="UlianenkoprModel.Books" Width="1.5" PointX="5.25" PointY="7.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="UlianenkoprModel.Complaints" Width="1.5" PointX="7.5" PointY="7.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="UlianenkoprModel.Genres" Width="1.5" PointX="7.5" PointY="11.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="UlianenkoprModel.ReadingLists" Width="1.5" PointX="10.5" PointY="9.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="UlianenkoprModel.Reviews" Width="1.5" PointX="10.5" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="UlianenkoprModel.RoleRequests" Width="1.5" PointX="5.25" PointY="12" IsExpanded="true" />
+        <EntityTypeShape EntityType="UlianenkoprModel.Roles" Width="1.5" PointX="0.75" PointY="10" IsExpanded="true" />
+        <EntityTypeShape EntityType="UlianenkoprModel.UnfreezeRequests" Width="1.5" PointX="10.5" PointY="12.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="UlianenkoprModel.Users" Width="1.5" PointX="3" PointY="9" IsExpanded="true" />
         <AssociationConnector Association="UlianenkoprModel.FK_Books_Users" ManuallyRouted="false" />
         <AssociationConnector Association="UlianenkoprModel.FK_Complaints_Books" ManuallyRouted="false" />
         <AssociationConnector Association="UlianenkoprModel.FK_ReadingLists_Books" ManuallyRouted="false" />

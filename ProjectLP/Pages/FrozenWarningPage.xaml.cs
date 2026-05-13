@@ -40,7 +40,7 @@ namespace ProjectLP.Pages
 
             try
             {
-                var request = new UnfreezeRequest
+                var request = new UnfreezeRequests
                 {
                     UserId = Core.CurrentUser.Id,
                     Reason = TbAppeal.Text,

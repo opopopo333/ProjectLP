@@ -20,12 +20,12 @@ namespace ProjectLP.Pages
     /// </summary>
     public partial class AddEditBookPage : Page
     {
-        private Book _currentBook;
+        private Books _currentBook;
 
-        public AddEditBookPage(Book selectedBook)
+        public AddEditBookPage(Books selectedBook)
         {
             InitializeComponent();
-            _currentBook = selectedBook ?? new Book();
+            _currentBook = selectedBook ?? new Books();
             DataContext = _currentBook;
         }
 
@@ -56,7 +56,7 @@ namespace ProjectLP.Pages
                 return;
             }
 
-            var selectedGenre = CbGenre.SelectedItem as Genre; 
+            var selectedGenre = CbGenre.SelectedItem as Genres; 
             if (selectedGenre == null)
             {
                 MessageBox.Show("Выберите жанр!");
